@@ -16,12 +16,12 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestEmpty(t *testing.T) {
+func TestReset(t *testing.T) {
 	set := &Set{n: 1}
-	set.Empty()
+	set.Reset()
 	want := 0
 	if set.n != want {
-		t.Errorf("after Empty, set.n = %d, want %d", set.n, want)
+		t.Errorf("after Reset, set.n = %d, want %d", set.n, want)
 	}
 }
 

@@ -32,8 +32,8 @@ func New(cap int) *Set {
 	return &Set{buf: make([]error, cap)}
 }
 
-// Empty removes all errors from s.
-func (s *Set) Empty() {
+// Reset removes all errors from s.
+func (s *Set) Reset() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.n = 0
@@ -64,7 +64,7 @@ func (s *Set) Add(err error) {
 // of n <= cap error values from s.
 //
 // If fewer than n errors have been added
-// since the last call to Empty,
+// since the last call to Reset,
 // it returns all errors added so far.
 //
 // Repeated calls to Sample are not random
@@ -72,7 +72,7 @@ func (s *Set) Add(err error) {
 // only with respect to
 // the sequence of errors added to s.
 // In particular, two successive calls to Sample
-// with no intervening Add or Empty
+// with no intervening Add or Reset
 // will return the same sample.
 func (s *Set) Sample(n int) []error {
 	s.mu.Lock()
@@ -93,7 +93,7 @@ func (s *Set) Cap() int {
 }
 
 // Added returns the number of errors added to s
-// since the last call to Empty.
+// since the last call to Reset.
 func (s *Set) Added() int {
 	s.mu.Lock()
 	defer s.mu.Unlock()
