@@ -1,0 +1,16 @@
+Package errorsample samples error values uniformly at
+random from an unbounded set of inputs.
+
+If you have more errors than you know what to do with,
+and you can't read them all or even store them all,
+and you want to get a rough idea of what all is going
+wrong, this package is for you!
+
+	set := errorsample.New(20)
+	...
+	set.Add(err) // add errors
+	...
+	set.Add(err) // LOTS of errors
+	...
+	errs := set.Sample(20)
+	fmt.Println("20 representative errors:", errs)
