@@ -19,7 +19,7 @@ import (
 //
 // Its methods are safe to call concurrently.
 // The zero value of Set is a set
-// with a capacity of 1, ready to use.
+// with a capacity of 0.
 type Set struct {
 	mu  sync.Mutex
 	n   int
@@ -45,10 +45,7 @@ func (s *Set) Add(err error) {
 	defer s.mu.Unlock()
 
 	if len(s.buf) < 1 {
-		s.buf = make([]error, 1)
-	}
-
-	if s.n < len(s.buf) {
+	} else if s.n < len(s.buf) {
 		s.buf[s.n] = err
 	} else if i := rand.Intn(s.n); i < len(s.buf) {
 		// Sample this item with prob. len(s.buf)/s.n.

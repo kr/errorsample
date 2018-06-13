@@ -109,7 +109,7 @@ func TestZero(t *testing.T) {
 		t.Errorf("Set{}.Added() = %d, want 3", gotAdded)
 	}
 	gotSample = set.Sample(5)
-	wantSample = []error{errors.New("a")}
+	wantSample = []error{}
 	if !reflect.DeepEqual(gotSample, wantSample) {
 		t.Errorf("Set{}.Sample() = %v, want %v", gotSample, wantSample)
 	}
