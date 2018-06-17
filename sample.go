@@ -57,12 +57,14 @@ func (s *Set) Add(err error) {
 	s.n++
 }
 
-// Sample returns a uniform random sample
-// of n <= cap error values from s.
+// Sample reads into p a uniform random sample
+// of error values from s.
+// It will not read more than the capacity of s.
+// It also will not read more errors
+// than have been added
+// since the last call to Reset.
 //
-// If fewer than n errors have been added
-// since the last call to Reset,
-// it returns all errors added so far.
+// It returns the number of errors read.
 //
 // Repeated calls to Sample are not random
 // with respect to each other,
@@ -70,16 +72,15 @@ func (s *Set) Add(err error) {
 // the sequence of errors added to s.
 // In particular, two successive calls to Sample
 // with no intervening Add or Reset
-// will return the same sample.
-func (s *Set) Sample(n int) []error {
+// will produce the same sample.
+func (s *Set) Sample(p []error) int {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-
-	a := make([]error, min(n, s.n, len(s.buf)))
-	for i := range a {
-		a[i] = s.buf[i]
+	b := s.buf
+	if s.n < len(b) {
+		b = b[:s.n]
 	}
-	return a
+	return copy(p, b)
 }
 
 // Cap returns the capacity of s.
@@ -95,13 +96,4 @@ func (s *Set) Added() int {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.n
-}
-
-func min(n0 int, n ...int) int {
-	for _, ni := range n {
-		if ni < n0 {
-			n0 = ni
-		}
-	}
-	return n0
 }

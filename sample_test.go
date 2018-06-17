@@ -61,9 +61,10 @@ func TestSample(t *testing.T) {
 	}
 	for _, test := range cases {
 		set := &Set{buf: make([]error, test.cap), n: test.added}
-		got := set.Sample(test.param)
-		if len(got) != 1 {
-			t.Errorf("case %+v len(got) = %d, want 1", test, len(got))
+		got := make([]error, test.param)
+		ngot := set.Sample(got)
+		if ngot != 1 {
+			t.Errorf("case %+v ngot = %d, want 1", test, ngot)
 		}
 	}
 }
@@ -94,7 +95,8 @@ func TestZero(t *testing.T) {
 	if gotAdded != 0 {
 		t.Errorf("Set{}.Added() = %d, want 0", gotAdded)
 	}
-	gotSample := set.Sample(5)
+	gotSample := make([]error, 5)
+	gotSample = gotSample[:set.Sample(gotSample)]
 	wantSample := []error{}
 	if !reflect.DeepEqual(gotSample, wantSample) {
 		t.Errorf("Set{}.Sample() = %v, want %v", gotSample, wantSample)
@@ -108,7 +110,8 @@ func TestZero(t *testing.T) {
 	if gotAdded != 3 {
 		t.Errorf("Set{}.Added() = %d, want 3", gotAdded)
 	}
-	gotSample = set.Sample(5)
+	gotSample = make([]error, 5)
+	gotSample = gotSample[:set.Sample(gotSample)]
 	wantSample = []error{}
 	if !reflect.DeepEqual(gotSample, wantSample) {
 		t.Errorf("Set{}.Sample() = %v, want %v", gotSample, wantSample)

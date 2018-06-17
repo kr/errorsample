@@ -12,5 +12,6 @@ wrong, this package is for you!
 	...
 	set.Add(err) // LOTS of errors
 	...
-	errs := set.Sample(20)
+	errs := make([]error, set.Cap())
+	errs = errs[:set.Sample(errs)]
 	fmt.Println("20 representative errors:", errs)
